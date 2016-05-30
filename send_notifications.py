@@ -1,4 +1,11 @@
 import random
+import notification
+
+
+minute = 60
+hour = minute*60
+day = hour*24
+week = day*7
 
 def get_provocations(file_name):
 	try:
@@ -13,6 +20,11 @@ def get_provocations(file_name):
 		fo.close()
 
 	return provocations
+	
+provocations = get_provocations('oblique_strategies.txt')
 
-provocation = random.choice(get_provocations('oblique_strategies.txt'))
-print('Brian Eno: ' + provocation)    
+for i in range(4):
+	delay = (10 * minute) + (i * (10 * minute))
+	provocation = 'Eno: ' + random.choice(provocations)
+	print(str(delay) + ' ' + provocation)
+	notification.schedule(provocation,delay)
