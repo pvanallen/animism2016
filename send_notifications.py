@@ -15,4 +15,4 @@ def get_provocations(file_name):
 	return provocations
 
 provocation = random.choice(get_provocations('oblique_strategies.txt'))
-print('Brian Eno: ' + provocation)
+print('Brian Eno: ' + provocation)    
