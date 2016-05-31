@@ -13,7 +13,7 @@ def get_provocations(file_name):
 		provocations = fo.read().split('\n')
 
 	except:
-		logging.info('no sync file found')
+		logging.info('no provocation file found')
 		provocations = ['None found']
 
 	else:
