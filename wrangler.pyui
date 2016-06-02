@@ -5,15 +5,58 @@
     "class" : "View",
     "nodes" : [
       {
+        "selected" : false,
+        "frame" : "{{6, 0}, {299, 32}}",
+        "class" : "Label",
+        "nodes" : [
+
+        ],
+        "attributes" : {
+          "font_name" : "<System>",
+          "text_color" : "RGBA(0.318396,0.318396,0.318396,1.000000)",
+          "frame" : "{{85, 224}, {150, 32}}",
+          "uuid" : "98A3DF69-FDFF-4CA9-ABE1-7A7F0ED9D6B5",
+          "text" : "Enter dialog text:",
+          "alignment" : "left",
+          "class" : "Label",
+          "name" : "send_status",
+          "font_size" : 18
+        }
+      },
+      {
         "selected" : true,
-        "frame" : "{{6, 41}, {314, 32}}",
+        "frame" : "{{6, 69}, {308, 32}}",
+        "class" : "Button",
+        "nodes" : [
+
+        ],
+        "attributes" : {
+          "uuid" : "66E4BBC5-6739-4DFE-9505-9057D247CD9F",
+          "flex" : "L",
+          "corner_radius" : 8,
+          "frame" : "{{120, 224}, {80, 32}}",
+          "border_color" : "RGBA(0.000000,0.000000,0.000000,1.000000)",
+          "border_width" : 1,
+          "tint_color" : "RGBA(0.389151,0.389151,0.389151,1.000000)",
+          "title" : "Start Dialog",
+          "action" : "send",
+          "alpha" : 1,
+          "font_bold" : true,
+          "class" : "Button",
+          "name" : "send_dialog",
+          "font_size" : 15
+        }
+      },
+      {
+        "selected" : false,
+        "frame" : "{{6, 29}, {308, 32}}",
         "class" : "TextField",
         "nodes" : [
 
         ],
         "attributes" : {
           "flex" : "W",
-          "font_size" : 17,
+          "font_name" : "<System>",
           "frame" : "{{44, 156}, {200, 32}}",
           "spellchecking_type" : "default",
           "class" : "TextField",
@@ -21,17 +64,17 @@
           "alignment" : "left",
           "autocorrection_type" : "default",
           "name" : "dialog",
-          "font_name" : "<System>"
+          "font_size" : 17
         }
       }
     ],
     "attributes" : {
-      "name" : "",
+      "flex" : "",
       "enabled" : true,
-      "background_color" : "RGBA(1.000000,1.000000,1.000000,1.000000)",
       "tint_color" : "RGBA(0.000000,0.478000,1.000000,1.000000)",
+      "name" : "",
       "border_color" : "RGBA(0.000000,0.000000,0.000000,1.000000)",
-      "flex" : ""
+      "background_color" : "RGBA(1.000000,1.000000,1.000000,1.000000)"
     }
   }
 ]
