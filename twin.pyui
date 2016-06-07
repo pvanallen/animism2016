@@ -1,0 +1,58 @@
+[
+  {
+    "selected" : false,
+    "frame" : "{{0, 0}, {1024, 768}}",
+    "class" : "View",
+    "nodes" : [
+      {
+        "selected" : false,
+        "frame" : "{{6, 6}, {489, 768}}",
+        "class" : "TableView",
+        "nodes" : [
+
+        ],
+        "attributes" : {
+          "uuid" : "F9C0A450-83D2-4124-9A05-33C3F5C731F1",
+          "flex" : "",
+          "background_color" : "RGBA(1.0, 1.0, 1.0, 1.0)",
+          "frame" : "{{412, 284}, {200, 200}}",
+          "data_source_items" : "Row 1\nRow 2\nRow 3\nasdf\nasdf\nasdf\nasdf\nasdf\nasdf\nasdf\nasdf\nasdf\n",
+          "data_source_number_of_lines" : 1,
+          "data_source_move_enabled" : true,
+          "data_source_delete_enabled" : true,
+          "data_source_font_size" : 18,
+          "row_height" : 150,
+          "class" : "TableView",
+          "name" : "tableview",
+          "editing" : false
+        }
+      },
+      {
+        "selected" : false,
+        "frame" : "{{493, 6}, {531, 762}}",
+        "class" : "WebView",
+        "nodes" : [
+
+        ],
+        "attributes" : {
+          "flex" : "WH",
+          "frame" : "{{412, 284}, {200, 200}}",
+          "uuid" : "BF626174-F3A8-40A7-B490-832985B28DD3",
+          "scales_to_fit" : true,
+          "class" : "WebView",
+          "custom_attributes" : "",
+          "name" : "webview1"
+        }
+      }
+    ],
+    "attributes" : {
+      "flex" : "",
+      "enabled" : true,
+      "tint_color" : "RGBA(0.000000,0.478000,1.000000,1.000000)",
+      "custom_class" : "ShowTableView",
+      "border_color" : "RGBA(0.000000,0.000000,0.000000,1.000000)",
+      "background_color" : "RGBA(1.000000,1.000000,1.000000,1.000000)",
+      "name" : ""
+    }
+  }
+]
