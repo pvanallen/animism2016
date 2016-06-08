@@ -13,7 +13,7 @@
         ],
         "attributes" : {
           "uuid" : "F9C0A450-83D2-4124-9A05-33C3F5C731F1",
-          "flex" : "",
+          "editing" : false,
           "background_color" : "RGBA(1.0, 1.0, 1.0, 1.0)",
           "frame" : "{{412, 284}, {200, 200}}",
           "data_source_items" : "Row 1\nRow 2\nRow 3\nasdf\nasdf\nasdf\nasdf\nasdf\nasdf\nasdf\nasdf\nasdf\n",
@@ -24,7 +24,7 @@
           "row_height" : 150,
           "class" : "TableView",
           "name" : "tableview",
-          "editing" : false
+          "flex" : ""
         }
       },
       {

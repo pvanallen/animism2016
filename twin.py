@@ -31,7 +31,7 @@ logging.basicConfig(level=logging.INFO, format='[%(levelname)s] (%(threadName)-1
 currentQuery = ""
 myQueue = Queue.Queue() # http://lonelycode.com/2011/02/04/python-threading-and-queues-and-why-its-awesome/
 
-class checkWangler (threading.Thread):
+class checkWrangler (threading.Thread):
 	def __init__(self, q, delay, notebook, note):
 		logging.debug("ever initializing")
 		threading.Thread.__init__(self)
@@ -52,22 +52,27 @@ class checkWangler (threading.Thread):
 		# loop until we get notice to terminate
 		try:
 			while self.running.isSet():
-				logging.debug("getting note")
 				#
 				# get most recent queryId for wrangler
 				try:
 					r = requests.get(self.url + '/wrangler')
 					wrangler = r.json()
+					r = requests.get(self.url + '/goodtwin')
+					me = r.json()
 					logging.info(json.dumps(wrangler, indent=4, sort_keys=True))
+					logging.info(json.dumps(me, indent=4, sort_keys=True))
 				except:
 					logging.info("couldn't get wrangler queryId" )
 
 				# get our most recent queryId
-				last_query_id = get_evernote_sync()
+				#last_query_id = get_evernote_sync()
 
 				# if they are different, get the query from Evernote
-				if wrangler['queryId'] != last_query_id:
-					set_evernote_sync(wrangler['queryId'])
+				if wrangler['queryId'] != me['lastQuery']:
+					#set_evernote_sync(wrangler['queryId'])
+					pay_load = {'lastQuery': wrangler['queryId'], 'mode': 'processing'}
+					r = requests.post(self.url + '/goodtwin')
+					print(json.dumps(r.json(), indent=4, sort_keys=True))
 					# get the query from Evernote
 					text = get_evernote_wrangler(self.noteStore, self.wrangler_note_guid)
 					# put the query in the queue
@@ -96,24 +101,7 @@ def get_evernote_wrangler(noteStore, noteGuid):
 	print (text,text_cleaned)
 	return(text_cleaned)
 
-def get_evernote_sync():
-	try:
-		fo = open("evernote_sync.txt", "r")
-		sync = fo.read()
 
-	except:
-		logging.info('no sync file found')
-		sync = '0'
-
-	else:
-		fo.close()
-
-	return sync
-
-def set_evernote_sync(value):
-	fo = open("evernote_sync.txt", "w")
-	fo.write(value)
-	fo.close()
 
 def display_search_results(results):
 	for result in results:
@@ -140,7 +128,7 @@ class ShowTableView(object):
 	def check_for_new(self, sender):
 		# kick off thread to see if there are any changes on evernote
 		#
-		self.thread = checkEvernote(self.myQueue, 2, "wrangler", "currentQuery")
+		self.thread = checkWrangler(self.myQueue, 2, "wrangler", "currentQuery")
 		self.thread.start()
 
 		try:
