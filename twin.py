@@ -12,6 +12,7 @@ import ui
 import os
 import textwrap
 import requests
+import pickle
 
 
 from bs4 import BeautifulSoup
@@ -59,8 +60,8 @@ class checkWrangler (threading.Thread):
 					wrangler = r.json()
 					r = requests.get(self.url + '/goodtwin')
 					me = r.json()
-					logging.info(json.dumps(wrangler, indent=4, sort_keys=True))
-					logging.info(json.dumps(me, indent=4, sort_keys=True))
+					logging.debug(json.dumps(wrangler, indent=4, sort_keys=True))
+					logging.debug(json.dumps(me, indent=4, sort_keys=True))
 				except:
 					logging.info("couldn't get wrangler queryId" )
 
@@ -70,9 +71,9 @@ class checkWrangler (threading.Thread):
 				# if they are different, get the query from Evernote
 				if wrangler['queryId'] != me['lastQuery']:
 					#set_evernote_sync(wrangler['queryId'])
-					pay_load = {'lastQuery': wrangler['queryId'], 'mode': 'processing'}
-					r = requests.post(self.url + '/goodtwin')
-					print(json.dumps(r.json(), indent=4, sort_keys=True))
+					payload = {'lastQuery': wrangler['queryId'], 'mode': 'processing'}
+					r = requests.post(self.url + '/goodtwin', data=payload)
+					#print(json.dumps(r.json(), indent=4, sort_keys=True))
 					# get the query from Evernote
 					text = get_evernote_wrangler(self.noteStore, self.wrangler_note_guid)
 					# put the query in the queue
@@ -102,16 +103,6 @@ def get_evernote_wrangler(noteStore, noteGuid):
 	return(text_cleaned)
 
 
-
-def display_search_results(results):
-	for result in results:
-		display_text = '{}: {}\n{}\n'.format(result['Title'],result['Description'],result['Url'])
-		print(display_text)
-	print('===================================================\n')
-	print('===================================================\n')
-
-
-
 class ShowTableView(object):
 	def __init__(self):
 		self.view = ui.load_view('twin')
@@ -120,7 +111,13 @@ class ShowTableView(object):
 		self.currentQuery = ""
 		self.myQueue = Queue.Queue() # http://lonelycode.com/2011/02/04/python-threading-and-queues-and-why-its-awesome/
 		atexit.register(self.exit_handler)
-		self.view['webview1'].load_url('http://google.com')
+		try:
+			results = pickle.load( open('results.p','rb'))
+			self.currentQuery = pickle.load( open('current_query.p', 'rb'))
+			self.display_search_results(None, results)
+		except:
+			logging.info('no results file')
+		
 		self.check_for_new(None)
 
 
@@ -138,26 +135,32 @@ class ShowTableView(object):
 					val = self.myQueue.get()
 					if val != self.currentQuery and val != '':
 						self.currentQuery = val
-						logging.info( "new query:\n" + val)
+						logging.debug( "new query:\n" + val)
 						self.display_search_results(None, self.bing_search(None,self.currentQuery))
 
-				time.sleep(2)
+				time.sleep(1)
 		except KeyboardInterrupt:
 			# clean up
 			self.exit_handler(None)
 
 	def display_search_results(self, sender, results):
-		logging.info("in searchresults")
-		#logging.info(results)
+		logging.debug("in searchresults")
+		pickle.dump(results,open('results.p','wb'))
+		pickle.dump(self.currentQuery,open('current_query.p','wb'))
+		self.view['webview1'].load_url(results[0]['Url'])
+		self.view['url'].text = results[0]['Url']
+		self.view['query'].text = self.currentQuery
+
 		results_lst = []
 
 		for result in results:
 			title = result['Title'] + '\n' + result['Description']
-			results_lst.append({'title': title,'url': result['Url'],'image':'ionicons-alert-32'})
+			results_lst.append({'title': title,'url': result['Url']})
 			#print(title)
 
 		lst = ui.ListDataSource(results_lst)
 		lst.number_of_lines = 5
+		lst.font = ('<system>',15)
 
 		#lst = ui.ListDataSource([{'title':'none','accessory_type':'none'},
 		#{'title':'checkmark','accessory_type':'checkmark'},
@@ -174,11 +177,15 @@ class ShowTableView(object):
 		tv1.data_source.delete_enabled = tv1.editing = False
 		lst.action = self.tv1_action
 		tv1.reload_data()
+		tv1.selected_row = (0,0)
+		
+		
 
 	#@ui.in_background
 	def tv1_action(self, sender):
 		info = sender.items[sender.selected_row]
 		self.view['webview1'].load_url(info['url'])
+		self.view['url'].text = info['url']
 
 	def bing_search(self, sender, query, search_type='Web', num_results=15, skip=0):
 		if query == "":
